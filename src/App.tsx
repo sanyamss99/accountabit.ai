@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import EmailSignupModal from './components/EmailSignupModal';
 import { 
   Target, 
   TrendingUp, 
@@ -40,6 +41,17 @@ function App() {
   const [isVisible, setIsVisible] = useState(false);
   const [currentFeature, setCurrentFeature] = useState(0);
   const [scrollY, setScrollY] = useState(0);
+  const [modalState, setModalState] = useState<{
+    isOpen: boolean;
+    source: string;
+    title: string;
+    description: string;
+  }>({
+    isOpen: false,
+    source: '',
+    title: '',
+    description: ''
+  });
 
   useEffect(() => {
     setIsVisible(true);
@@ -58,6 +70,19 @@ function App() {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+
+  const openModal = (source: string, title: string, description: string) => {
+    setModalState({
+      isOpen: true,
+      source,
+      title,
+      description
+    });
+  };
+
+  const closeModal = () => {
+    setModalState(prev => ({ ...prev, isOpen: false }));
+  };
 
   const features = [
     {
@@ -190,14 +215,28 @@ function App() {
             </div>
             
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
-              <button className="group bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl">
+              <button 
+                onClick={() => openModal(
+                  'hero-cta',
+                  'Start Your Success Journey',
+                  'Join thousands who have transformed their goals into achievements with AI-powered accountability.'
+                )}
+                className="group bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
+              >
                 <div className="flex items-center gap-3">
                   Start Your Journey
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
                 </div>
               </button>
               
-              <button className="group flex items-center gap-3 text-gray-600 hover:text-blue-600 transition-colors duration-300">
+              <button 
+                onClick={() => openModal(
+                  'hero-demo',
+                  'See How It Works',
+                  'Get a personalized demo of how our AI accountability coach will help you achieve your goals.'
+                )}
+                className="group flex items-center gap-3 text-gray-600 hover:text-blue-600 transition-colors duration-300"
+              >
                 <div className="w-12 h-12 bg-gray-100 hover:bg-blue-50 rounded-full flex items-center justify-center transition-colors duration-300">
                   <Play className="w-5 h-5 ml-0.5" />
                 </div>
@@ -512,14 +551,28 @@ function App() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-12">
-            <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 hover:scale-105 shadow-lg">
+            <button 
+              onClick={() => openModal(
+                'cta-trial',
+                'Start Your Free Trial',
+                'Begin your 14-day free trial and experience the power of AI-driven accountability coaching.'
+              )}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 hover:scale-105 shadow-lg"
+            >
               <div className="flex items-center gap-3">
                 Start Your Free Trial
                 <ArrowRight className="w-5 h-5" />
               </div>
             </button>
             
-            <button className="text-gray-300 hover:text-blue-400 transition-colors flex items-center gap-3 font-medium">
+            <button 
+              onClick={() => openModal(
+                'cta-demo',
+                'Schedule Your Demo',
+                'Book a personalized consultation to see how accountabit.ai can transform your goal achievement.'
+              )}
+              className="text-gray-300 hover:text-blue-400 transition-colors flex items-center gap-3 font-medium"
+            >
               <Phone className="w-5 h-5" />
               Schedule a Demo Call
             </button>
@@ -561,6 +614,15 @@ function App() {
           </div>
         </div>
       </footer>
+
+      {/* Email Signup Modal */}
+      <EmailSignupModal
+        isOpen={modalState.isOpen}
+        onClose={closeModal}
+        source={modalState.source}
+        title={modalState.title}
+        description={modalState.description}
+      />
     </div>
   );
 }
