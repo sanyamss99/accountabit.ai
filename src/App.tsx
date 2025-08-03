@@ -466,71 +466,82 @@ function App() {
       <section className="py-20 px-6 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <div className="inline-flex items-center px-4 py-2 bg-yellow-50 text-yellow-700 rounded-full text-sm font-medium mb-8">
-              <Star className="w-4 h-4 mr-2" />
-              Success Stories
+            <div className="inline-flex items-center px-4 py-2 bg-purple-50 text-purple-700 rounded-full text-sm font-medium mb-8">
+              <Users className="w-4 h-4 mr-2" />
+              Join the Waitlist
             </div>
             
             <h2 className="text-4xl md:text-5xl font-bold mb-8 text-gray-900">
-              Real Results from Real People
+              Be Among the First to Experience
+              <span className="block text-purple-600">AI-Powered Accountability</span>
             </h2>
             
-            <div className="flex justify-center gap-1 mb-8">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-8 h-8 text-yellow-400 fill-current" />
-              ))}
-            </div>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              accountabit.ai is launching soon. Join our exclusive waitlist to get early access 
+              and be the first to transform your goals into achievements.
+            </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                name: "Sarah Chen",
-                role: "Marketing Director",
-                content: "Finally achieved my fitness goals after years of false starts. The daily check-ins kept me accountable when motivation was low.",
-                achievement: "Lost 30 lbs",
-                avatar: "SC"
-              },
-              {
-                name: "Michael Rodriguez",
-                role: "Software Engineer",
-                content: "Launched my side business in 6 months. The AI broke down my overwhelming goal into manageable daily tasks.",
-                achievement: "Business Launched",
-                avatar: "MR"
-              },
-              {
-                name: "Emily Johnson",
-                role: "Teacher",
-                content: "Completed my master's degree while working full-time. The accountability calls were exactly what I needed.",
-                achievement: "Degree Completed",
-                avatar: "EJ"
-              }
-            ].map((story, index) => (
-              <div key={index} className="bg-gray-50 p-8 rounded-xl border border-gray-200">
-                <div className="flex gap-1 mb-6">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
-                  ))}
+          <div className="max-w-2xl mx-auto">
+            <div className="bg-gradient-to-br from-purple-50 to-blue-50 p-12 rounded-2xl border border-purple-200">
+              <div className="text-center mb-8">
+                <div className="w-20 h-20 mx-auto bg-purple-600 rounded-full flex items-center justify-center mb-6">
+                  <Bell className="w-10 h-10 text-white" />
                 </div>
                 
-                <p className="text-gray-700 mb-6 leading-relaxed italic">"{story.content}"</p>
+                <h3 className="text-3xl font-bold text-gray-900 mb-4">Get Early Access</h3>
+                <p className="text-gray-600 text-lg leading-relaxed">
+                  Be the first to know when accountabit.ai launches. Early waitlist members get 
+                  exclusive benefits and priority access.
+                </p>
+              </div>
+              
+              <div className="grid md:grid-cols-3 gap-6 mb-8">
+                <div className="text-center">
+                  <div className="w-12 h-12 mx-auto bg-purple-100 rounded-full flex items-center justify-center mb-3">
+                    <Crown className="w-6 h-6 text-purple-600" />
+                  </div>
+                  <h4 className="font-semibold text-gray-900 mb-2">Early Access</h4>
+                  <p className="text-gray-600 text-sm">Be among the first to use the platform</p>
+                </div>
                 
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center font-bold text-white">
-                      {story.avatar}
-                    </div>
-                    <div>
-                      <div className="font-semibold text-gray-900">{story.name}</div>
-                      <div className="text-gray-600 text-sm">{story.role}</div>
-                    </div>
+                <div className="text-center">
+                  <div className="w-12 h-12 mx-auto bg-blue-100 rounded-full flex items-center justify-center mb-3">
+                    <Diamond className="w-6 h-6 text-blue-600" />
                   </div>
-                  <div className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
-                    {story.achievement}
+                  <h4 className="font-semibold text-gray-900 mb-2">Special Pricing</h4>
+                  <p className="text-gray-600 text-sm">Exclusive launch discount for waitlist members</p>
+                </div>
+                
+                <div className="text-center">
+                  <div className="w-12 h-12 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-3">
+                    <Sparkles className="w-6 h-6 text-green-600" />
                   </div>
+                  <h4 className="font-semibold text-gray-900 mb-2">Beta Features</h4>
+                  <p className="text-gray-600 text-sm">Access to exclusive features and updates</p>
                 </div>
               </div>
-            ))}
+              
+              <div className="text-center">
+                <button 
+                  onClick={() => openModal(
+                    'waitlist-signup',
+                    'Join the Waitlist',
+                    'Get early access to accountabit.ai and be the first to experience AI-powered accountability coaching.'
+                  )}
+                  className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 hover:scale-105 shadow-lg"
+                >
+                  <div className="flex items-center gap-3">
+                    Join the Waitlist
+                    <ArrowRight className="w-5 h-5" />
+                  </div>
+                </button>
+                
+                <p className="text-gray-500 text-sm mt-4">
+                  Join <span className="font-semibold text-purple-600">2,847</span> others waiting for launch
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
