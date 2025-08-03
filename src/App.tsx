@@ -172,8 +172,8 @@ function App() {
   const stats = [
     { value: "94%", label: "Success Rate", icon: Trophy },
     { value: "24/7", label: "AI Support", icon: Headphones },
-    { value: "10k+", label: "Goals Achieved", icon: Target },
-    { value: "4.9★", label: "User Rating", icon: Star }
+    { value: "Soon", label: "Launch Date", icon: Target },
+    { value: "Beta", label: "Early Access", icon: Star }
   ];
 
   return (
