@@ -47,7 +47,7 @@ export async function saveEmailSignup(email: string, source: string = 'unknown')
 
     const { data, error } = await supabase
       .from('email_signups')
-      .insert([{ email, source }])
+      .upsert([{ email, source }], { onConflict: 'email' })
       .select()
       .single();
 
