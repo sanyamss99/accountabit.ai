@@ -80,7 +80,14 @@ export default function EmailSignupModal({
               <CheckCircle className="w-8 h-8 text-green-600" />
             </div>
             <h3 className="text-xl font-semibold text-gray-900 mb-2">You're All Set!</h3>
-            <p className="text-gray-600">We'll be in touch soon with your personalized accountability plan.</p>
+            <p className="text-gray-600 mb-4">
+              Welcome to accountabit.ai! Check your email for a welcome message with all the details about your early access benefits.
+            </p>
+            <div className="bg-blue-50 p-4 rounded-lg">
+              <p className="text-blue-800 text-sm">
+                📧 A confirmation email has been sent to <strong>{email}</strong>
+              </p>
+            </div>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-6">

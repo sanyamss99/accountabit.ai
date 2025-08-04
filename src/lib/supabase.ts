@@ -29,6 +29,10 @@ export async function saveEmailSignup(email: string, source: string = 'unknown')
       console.log('Demo mode: Email signup simulated', { email, source });
       // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Simulate sending welcome email in demo mode
+      console.log('📧 Demo: Welcome email would be sent to:', email);
+      
       return { 
         success: true, 
         data: { 
@@ -51,6 +55,13 @@ export async function saveEmailSignup(email: string, source: string = 'unknown')
       throw error;
     }
 
+    // Send welcome email after successful signup
+    try {
+      await sendWelcomeEmail(email, source);
+    } catch (emailError) {
+      console.error('Failed to send welcome email:', emailError);
+      // Don't fail the signup if email fails
+    }
     return { success: true, data };
   } catch (error: any) {
     console.error('Error saving email:', error);
@@ -58,5 +69,29 @@ export async function saveEmailSignup(email: string, source: string = 'unknown')
       success: false, 
       error: error.message || 'Failed to save email' 
     };
+  }
+}
+
+async function sendWelcomeEmail(email: string, source: string) {
+  try {
+    // If Supabase is not configured, just log for demo
+    if (!supabase) {
+      console.log('📧 Demo: Welcome email simulation for:', email);
+      return;
+    }
+
+    const { data, error } = await supabase.functions.invoke('send-welcome-email', {
+      body: { email, source }
+    });
+
+    if (error) {
+      throw error;
+    }
+
+    console.log('✅ Welcome email sent successfully to:', email);
+    return data;
+  } catch (error) {
+    console.error('❌ Failed to send welcome email:', error);
+    throw error;
   }
 }
