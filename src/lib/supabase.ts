@@ -72,6 +72,77 @@ export async function saveEmailSignup(email: string, source: string = 'unknown')
   }
 }
 
+export async function exportEmailsCSV() {
+  try {
+    if (!supabase) {
+      console.log('Demo mode: CSV export simulated');
+      // Return demo CSV content
+      const demoCSV = `Email,Source,Created At,Updated At
+"demo@example.com","hero-cta","2025-01-21T10:00:00.000Z","2025-01-21T10:00:00.000Z"
+"test@example.com","waitlist-signup","2025-01-21T11:00:00.000Z","2025-01-21T11:00:00.000Z"`;
+      
+      const blob = new Blob([demoCSV], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `accountabit-email-signups-demo-${new Date().toISOString().split('T')[0]}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      
+      return { success: true };
+    }
+
+    const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/export-emails-csv`;
+    
+    const response = await fetch(apiUrl, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Failed to export CSV');
+    }
+
+    // Get the CSV content and trigger download
+    const csvContent = await response.text();
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    
+    // Extract filename from Content-Disposition header or use default
+    const contentDisposition = response.headers.get('Content-Disposition');
+    let filename = `accountabit-email-signups-${new Date().toISOString().split('T')[0]}.csv`;
+    
+    if (contentDisposition) {
+      const filenameMatch = contentDisposition.match(/filename="(.+)"/);
+      if (filenameMatch) {
+        filename = filenameMatch[1];
+      }
+    }
+    
+    // Create download link and trigger download
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    return { success: true };
+  } catch (error: any) {
+    console.error('Error exporting CSV:', error);
+    return { 
+      success: false, 
+      error: error.message || 'Failed to export CSV' 
+    };
+  }
+}
+
 async function sendWelcomeEmail(email: string, source: string) {
   try {
     // If Supabase is not configured, just log for demo

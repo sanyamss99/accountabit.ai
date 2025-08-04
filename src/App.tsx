@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import EmailSignupModal from './components/EmailSignupModal';
+import AdminPanel from './components/AdminPanel';
 import { 
   Target, 
   TrendingUp, 
@@ -41,6 +42,7 @@ function App() {
   const [isVisible, setIsVisible] = useState(false);
   const [currentFeature, setCurrentFeature] = useState(0);
   const [scrollY, setScrollY] = useState(0);
+  const [showAdminPanel, setShowAdminPanel] = useState(false);
   const [modalState, setModalState] = useState<{
     isOpen: boolean;
     source: string;
@@ -65,9 +67,18 @@ function App() {
     const handleScroll = () => setScrollY(window.scrollY);
     window.addEventListener('scroll', handleScroll);
 
+    // Admin panel toggle (Ctrl+Shift+A)
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.shiftKey && e.key === 'A') {
+        e.preventDefault();
+        setShowAdminPanel(prev => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
     return () => {
       clearInterval(featureInterval);
       window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('keydown', handleKeyDown);
     };
   }, []);
 
@@ -634,6 +645,9 @@ function App() {
         title={modalState.title}
         description={modalState.description}
       />
+
+      {/* Admin Panel */}
+      {showAdminPanel && <AdminPanel />}
     </div>
   );
 }
