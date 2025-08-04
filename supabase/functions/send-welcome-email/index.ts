@@ -170,7 +170,7 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'accountabit.ai <hello@accountabit.ai>',
+        from: 'Accountabit AI <onboarding@resend.dev>',
         to: [email],
         subject: 'Welcome to accountabit.ai - You\'re on the waitlist! 🎯',
         html: emailHtml,
