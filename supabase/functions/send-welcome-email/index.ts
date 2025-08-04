@@ -24,6 +24,31 @@ serve(async (req) => {
       )
     }
 
+    // Get Resend API key from environment variables
+    const resendApiKey = Deno.env.get('RESEND_API_KEY')
+    
+    if (!resendApiKey) {
+      console.log('📧 Demo mode: No RESEND_API_KEY found, simulating email send')
+      console.log(`📧 Would send welcome email to: ${email} (source: ${source})`)
+      
+      // Simulate email sending delay
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      
+      return new Response(
+        JSON.stringify({ 
+          success: true, 
+          message: 'Email simulated successfully (demo mode)',
+          email: email,
+          source: source,
+          demo: true
+        }),
+        { 
+          status: 200, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        }
+      )
+    }
+
     // Email template
     const emailHtml = `
     <!DOCTYPE html>
@@ -137,26 +162,37 @@ serve(async (req) => {
     </html>
     `
 
-    // For demo purposes, we'll simulate sending the email
-    // In production, you would integrate with an email service like:
-    // - Resend (recommended for Supabase)
-    // - SendGrid
-    // - Mailgun
-    // - AWS SES
+    // Send email using Resend API
+    const resendResponse = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${resendApiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: 'accountabit.ai <hello@accountabit.ai>',
+        to: [email],
+        subject: 'Welcome to accountabit.ai - You\'re on the waitlist! 🎯',
+        html: emailHtml,
+      }),
+    })
 
-    console.log(`📧 Welcome email would be sent to: ${email}`)
-    console.log(`📊 Source: ${source}`)
-    console.log(`✅ Email content prepared and ready to send`)
+    if (!resendResponse.ok) {
+      const errorText = await resendResponse.text()
+      console.error('Resend API error:', errorText)
+      throw new Error(`Resend API error: ${resendResponse.status} ${errorText}`)
+    }
 
-    // Simulate email sending delay
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    const resendData = await resendResponse.json()
+    console.log('✅ Email sent successfully via Resend:', resendData)
 
     return new Response(
       JSON.stringify({ 
         success: true, 
         message: 'Welcome email sent successfully',
         email: email,
-        source: source
+        source: source,
+        emailId: resendData.id
       }),
       { 
         status: 200, 

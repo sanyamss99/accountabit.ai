@@ -76,7 +76,7 @@ async function sendWelcomeEmail(email: string, source: string) {
   try {
     // If Supabase is not configured, just log for demo
     if (!supabase) {
-      console.log('📧 Demo: Welcome email simulation for:', email);
+      console.log('📧 Demo mode: Email would be sent to:', email, 'from source:', source);
       return;
     }
 
@@ -85,10 +85,16 @@ async function sendWelcomeEmail(email: string, source: string) {
     });
 
     if (error) {
+      console.error('Edge function error:', error);
       throw error;
     }
 
-    console.log('✅ Welcome email sent successfully to:', email);
+    if (data?.demo) {
+      console.log('📧 Demo mode: Email simulated for:', email);
+    } else {
+      console.log('✅ Welcome email sent successfully to:', email);
+    }
+    
     return data;
   } catch (error) {
     console.error('❌ Failed to send welcome email:', error);
